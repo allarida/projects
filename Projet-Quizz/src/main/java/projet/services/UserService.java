@@ -24,7 +24,7 @@ public class UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	@Secured(value= {"ROLE_eleve"})
+	//@Secured(value= {"ROLE_eleve"})
 	@RequestMapping(value="/users",method=RequestMethod.GET)
     public List<User> getAllUsers() {
         return userRepository.findAll();

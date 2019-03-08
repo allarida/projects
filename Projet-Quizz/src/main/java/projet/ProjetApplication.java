@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import projet.dao.IndiceRepository;
 import projet.dao.QuestionRepository;
@@ -14,12 +16,15 @@ import projet.dao.QuizzRepository;
 import projet.dao.ReponseEleveRepository;
 import projet.dao.ReponseRepository;
 import projet.dao.UserRepository;
+import projet.entities.AppRole;
+import projet.entities.AppUser;
 import projet.entities.Indice;
 import projet.entities.Question;
 import projet.entities.Quizz;
 import projet.entities.Reponse;
 import projet.entities.ReponseEleve;
 import projet.entities.User;
+import projet.services.AccountService;
 
 
 
@@ -37,11 +42,17 @@ public class ProjetApplication implements CommandLineRunner{
 	private ReponseEleveRepository repEleveDao ;
 	@Autowired
 	private ReponseRepository repDao ;
+	@Autowired
+	private AccountService accountService;
 	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetApplication.class, args);
 			
+	}
+	@Bean
+	public BCryptPasswordEncoder getBCPE() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Override
@@ -202,6 +213,12 @@ public class ProjetApplication implements CommandLineRunner{
 		repEleveDao.save(repE3_8);
 		repEleveDao.save(repE3_9);
 		
+		accountService.saveUser(new AppUser(null,"admin","123",null) );
+		accountService.saveUser(new AppUser(null,"user","123",null) );
+		accountService.saveRole(new AppRole(null,"ADMIN"));
+		accountService.saveRole(new AppRole(null,"USER"));
+		accountService.addRoleToUser("admin", "ADMIN");
+		accountService.addRoleToUser("user", "USER");
 		
 		List<User> users = userDao.findAll();
 		users.forEach(u->System.out.println(u.getPseudo()));

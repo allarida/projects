@@ -27,7 +27,7 @@ public class QuizzService {
 	
 	@Autowired
 	private QuizzRepository quizzRepository;
-	//@Secured(value= {"ROLE_admin"})
+	//@Secured(value= {"ROLE_"})
 	@RequestMapping(value="/quizzs",method=RequestMethod.GET)
     public List<Quizz> getAllQuizzs() {
         return quizzRepository.findAll();
